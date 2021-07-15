@@ -11,6 +11,8 @@ plugins.push([
       screens: './src/screens',
       assets: './src/assets',
       json: './src/assets/json',
+      models: './src/models',
+      components: './src/components',
     },
   },
 ]);
