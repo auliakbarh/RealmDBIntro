@@ -1,43 +1,58 @@
 import Realm, {BaseConfiguration, Results} from 'realm';
-import {UsersScheme, TasksScheme} from 'models';
+import {
+  UsersScheme,
+  TasksSchemeName,
+  TasksScheme,
+  UsersSchemeName,
+  CustomersScheme,
+  CustomersSchemeName,
+} from 'models';
+
+export const schemeNames = [
+  TasksSchemeName,
+  UsersSchemeName,
+  CustomersSchemeName,
+];
 
 export const databaseOptions: BaseConfiguration = {
   path: 'MyRealm.realm',
-  schema: [UsersScheme, TasksScheme],
+  schema: [UsersScheme, TasksScheme, CustomersScheme],
   schemaVersion: 0,
 };
 
-type BulkInsertResponse = {
+type Response = {
   error: boolean;
   message?: any;
-  data?: Results<Object>;
+  data?: Results<Object> | {[key: string]: any};
 };
 
+export type BulkInsertResponse = Response;
+export type DeleteResponse = Response;
+export type TruncateResponse = Response;
+export type TruncateAllResponse = Response;
+export type GetSizeResponse = Response;
+
 export default class Services {
-  private db: Realm;
+  private readonly db: Realm;
+  private readonly schemeNames: string[];
   constructor() {
     this.db = new Realm(databaseOptions);
+    this.schemeNames = schemeNames;
   }
 
   async bulkInsert({
     name,
     data,
-    primaryKey,
   }: {
     name: string;
     data: any[];
-    primaryKey: string;
   }): Promise<BulkInsertResponse> {
     let result: BulkInsertResponse = {error: true, message: ''};
     try {
       this.db.write(() => {
         data.forEach(item => {
-          if (
-            this.db.objects(name).filtered(`${primaryKey}==${item[primaryKey]}`)
-              .length === 0
-          ) {
-            this.db.create(name, item);
-          }
+          // @ts-ignore
+          this.db.create(name, item, 'modified');
         });
         result = {
           error: false,
@@ -48,7 +63,91 @@ export default class Services {
     } catch (e) {
       return {
         error: true,
-        message: e.message,
+        message: e,
+      };
+    }
+  }
+
+  realm() {
+    return this.db;
+  }
+
+  allSchemeNames() {
+    return this.schemeNames;
+  }
+
+  async delete({
+    name,
+    filterQuery,
+  }: {
+    name: string;
+    filterQuery: string;
+  }): Promise<DeleteResponse> {
+    try {
+      this.db.write(() => {
+        const obj = this.db.objects(name).filtered(filterQuery);
+        this.db.delete(obj);
+      });
+      return {
+        error: false,
+      };
+    } catch (e) {
+      return {
+        error: true,
+        message: e,
+      };
+    }
+  }
+
+  async truncate(name: string): Promise<TruncateResponse> {
+    try {
+      this.db.write(() => {
+        // this.db.delete(this.db.objects(name));
+        this.db.deleteModel(name);
+      });
+      return {error: false};
+    } catch (e) {
+      return {
+        error: true,
+        message: e,
+      };
+    }
+  }
+
+  async truncateAll(): Promise<TruncateAllResponse> {
+    let result: TruncateAllResponse = {error: true, message: ''};
+    try {
+      this.db.write(() => {
+        this.db.deleteAll();
+
+        let data: {[key: string]: any} = {};
+        this.schemeNames.forEach(name => {
+          data[name] = this.db.objects(name);
+        });
+
+        result = {error: false, data};
+      });
+      return result;
+    } catch (e) {
+      return {error: true, message: e};
+    }
+  }
+
+  async getSize(): Promise<GetSizeResponse> {
+    let result: GetSizeResponse = {error: true, message: ''};
+    try {
+      this.db.write(() => {
+        let data: {[key: string]: any} = {};
+        this.schemeNames.forEach(item => {
+          data[item] = this.db.objects(item).length;
+        });
+        result = {error: false, data};
+      });
+      return result;
+    } catch (e) {
+      return {
+        error: true,
+        message: e,
       };
     }
   }
