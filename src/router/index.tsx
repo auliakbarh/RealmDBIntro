@@ -28,6 +28,16 @@ export default function App() {
             />
           )}
         </Tab.Screen>
+        <Tab.Screen
+          name={ScreenNames.TAB_NAME.customerList}
+          options={{title: 'Customer List'}}>
+          {props => (
+            <StackNavigator
+              {...props}
+              initialRouteName={ScreenNames.STACK_NAME.customerList}
+            />
+          )}
+        </Tab.Screen>
       </Tab.Navigator>
     </NavigationContainer>
   );

@@ -9,24 +9,24 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Button, TextInput} from '@/components';
-import {UsersService} from '@/services';
-import {UsersType} from '@/models';
+import {CustomersService} from '@/services';
+import {CustomersType} from '@/models';
 import {CollectionChangeCallback, Object} from 'realm';
 import {useNavigation} from '@react-navigation/native';
 
 interface Props {}
 
-const UserListContainer: React.FC<Props> = ({}) => {
+const CustomerListContainer: React.FC<Props> = ({}) => {
   const navigation = useNavigation();
-  const usersService = new UsersService();
+  const customersService = new CustomersService();
 
   const deleteAll = async () => {
-    await usersService.deleteAllData();
+    await customersService.deleteAllData();
   };
 
   useEffect(() => {
     navigation.setOptions({
-      title: 'User List',
+      title: 'Customer List',
       headerRight: () => (
         <TouchableOpacity style={styles.deleteAllContainer} onPress={deleteAll}>
           <Text>Delete All</Text>
@@ -45,39 +45,39 @@ const UserListContainer: React.FC<Props> = ({}) => {
     'insert',
   );
   const [sortBy, setSortBy] = useState<'asc' | 'desc'>('asc');
-  const [firstName, setFirstName] = useState<string>('');
+  const [customerName, setCustomerName] = useState<string>('');
 
-  const [data, setData] = useState<UsersType[]>([]);
-  const getUserObject = () => {
-    const result = usersService.loadAllData() as UsersType[];
+  const [data, setData] = useState<CustomersType[]>([]);
+  const getCustomerObject = () => {
+    const result = customersService.loadAllData() as CustomersType[];
     setData(result);
   };
 
   const setDataUsers = async () => {
     handlerDisabledButton('setData', true);
-    await usersService.setDataUsers();
+    await customersService.setDataCustomers();
   };
 
   useEffect(() => {
-    const users = usersService.obj();
+    const customers = customersService.obj();
     const listener: CollectionChangeCallback<Object> = (
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      usersCollection,
+      customerCollection,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       changes,
     ) => {
-      getUserObject();
+      getCustomerObject();
       handlerDisabledButton('setData', false);
 
       /*
       changes.insertions.forEach(index => {
-        let insertedTasks = usersCollection[index];
-        console.log(`insertedUser: ${JSON.stringify(insertedTasks, null, 2)}`);
+        let insertedTasks = customerCollection[index];
+        console.log(
+          `insertedCustomer: ${JSON.stringify(insertedTasks, null, 2)}`,
+        );
       });
       changes.deletions.forEach(index => {
-        let deletedTasks = usersCollection[index];
-        // Deleted objects cannot be accessed directly,
-        // but we can update a UI list, etc. knowing the index.
+        let deletedTasks = customerCollection[index];
         console.log(
           `A task was deleted at the ${index} index: \n${JSON.stringify(
             deletedTasks,
@@ -87,62 +87,62 @@ const UserListContainer: React.FC<Props> = ({}) => {
         );
       });
       changes.newModifications.forEach(index => {
-        let modifiedTask = usersCollection[index];
+        let modifiedTask = customerCollection[index];
         console.log(`modifiedTask: ${JSON.stringify(modifiedTask, null, 2)}`);
       });
       */
     };
-    users.addListener(listener);
+    customers.addListener(listener);
     return () => {
-      console.log('remove all users listener');
-      users.removeAllListeners();
+      console.log('remove all customers listener');
+      customers.removeAllListeners();
     };
   }, []);
 
-  const [selectedList, setSelectedList] = useState<number | undefined>(
+  const [selectedList, setSelectedList] = useState<string | undefined>(
     undefined,
   );
 
-  const renderItem = ({item}: {item: UsersType}) => {
+  const renderItem = ({item}: {item: CustomersType}) => {
     return (
       <TouchableOpacity
         style={[
           styles.userList,
-          selectedList === item.id && styles.selectedUserList,
+          selectedList === item._id && styles.selectedUserList,
         ]}
-        onPress={() => setSelectedList(item.id)}>
-        <Text style={styles.label}>{`${item.first_name} ${
-          item.last_name ? item.last_name : ''
+        onPress={() => setSelectedList(item._id)}>
+        <Text style={styles.label}>{`${item.name} ${
+          item.phone ? item.phone : ''
         }`}</Text>
       </TouchableOpacity>
     );
   };
 
   const insert = () => {
-    if (firstName.length > 0) {
-      usersService.insert(firstName);
+    if (customerName.length > 0) {
+      customersService.insert(customerName);
     }
   };
 
   const deleteItem = () => {
     if (selectedList !== undefined) {
-      usersService.deleteById(selectedList);
+      customersService.deleteById(selectedList);
     }
   };
 
   const update = () => {
-    if (selectedList !== undefined && firstName.length > 0) {
-      usersService.update(selectedList, firstName);
+    if (selectedList !== undefined && customerName.length > 0) {
+      customersService.update(selectedList, customerName);
     }
   };
 
   const sort = () => {
     switch (sortBy) {
       case 'desc':
-        return usersService.sortByFirstName('DESC');
+        return customersService.sortByName('DESC');
       case 'asc':
       default:
-        return usersService.sortByFirstName('ASC');
+        return customersService.sortByName('ASC');
     }
   };
 
@@ -171,7 +171,7 @@ const UserListContainer: React.FC<Props> = ({}) => {
         break;
     }
     setSelectedList(undefined);
-    setFirstName('');
+    setCustomerName('');
   };
 
   return (
@@ -239,8 +239,8 @@ const UserListContainer: React.FC<Props> = ({}) => {
         <View style={[styles.row, styles.marginB16]}>
           <TextInput
             style={styles.textInput}
-            onChangeText={setFirstName}
-            value={firstName}
+            onChangeText={setCustomerName}
+            value={customerName}
           />
           <View style={styles.separatorHorizontal} />
           <Button label={'Run'} style={styles.buttonRun} onPress={run} />
@@ -250,7 +250,7 @@ const UserListContainer: React.FC<Props> = ({}) => {
       <FlatList
         data={data}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={item => item._id.toString()}
         renderItem={renderItem}
         initialNumToRender={10}
         windowSize={5}
@@ -319,4 +319,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserListContainer;
+export default CustomerListContainer;
