@@ -24,13 +24,15 @@ const UserListContainer: React.FC<Props> = ({}) => {
     await usersService.deleteAllData();
   };
 
-  navigation.setOptions({
-    headerRight: () => (
-      <TouchableOpacity style={styles.deleteAllContainer} onPress={deleteAll}>
-        <Text>Delete All</Text>
-      </TouchableOpacity>
-    ),
-  });
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity style={styles.deleteAllContainer} onPress={deleteAll}>
+          <Text>Delete All</Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, []);
 
   const [action, setAction] = useState<'insert' | 'update' | 'delete'>(
     'insert',
