@@ -13,6 +13,7 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "apply-gitignore": "git rm -r --cached . && git add . && git commit -m \".gitignore is now working\"",
     "get-fingerprint-debug": "cd android/app && keytool -list -v -keystore debug.keystore -alias androiddebugkey -storepass android -keypass android",
     "get-keyhash-debug": "cd android/app && keytool -exportcert -alias androiddebugkey -keystore debug.keystore | openssl sha1 -binary | openssl base64",
     "get-fingerprint-release": "cd android/app && keytool -list -v -keystore my-upload-key.keystore -alias my-key-alias -storepass auliakbarh -keypass auliakbarh",
