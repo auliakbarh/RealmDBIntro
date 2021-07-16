@@ -1,0 +1,52 @@
+name: Android CI Build & upload to Firebase App Distribution
+
+on:
+  push:
+    branches:
+      - 'firebaseDistribution'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@master
+      - uses: c-hive/gha-yarn-cache@v1
+      - name: Install node modules
+        run: |
+          yarn install
+      - name: Cache Gradle Wrapper
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+
+      - name: Cache Gradle Dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-caches-
+
+      - name: Grant execute permission for gradlew
+        run: cd android && chmod +x ./gradlew
+      - name: Build App with Gradle
+        run: cd android && ./gradlew :app:assembleRelease --no-daemon
+      - name: Distribute app via Firebase App Distribution
+        env:
+          firebaseToken: ${{ secrets.FIREBASE_TOKEN }}
+          firebaseGroups: ${{ secrets.FIREBASE_GROUPS }}
+          firebaseAppId: ${{ secrets.FIREBASE_APP_ID }}
+          notes: ${{ github.event.head_commit.message }}
+        run: |
+          yarn global add firebase-tools
+          export PATH="$(yarn global bin):$PATH"
+          firebase \
+            appdistribution:distribute android/app/build/outputs/apk/release/app-release.apk \
+            --app $firebaseAppId \
+            --release-notes "$notes" \
+            --groups "$firebaseGroups" \
+            --token "$firebaseToken"
