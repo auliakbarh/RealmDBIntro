@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "789139840738",
+    "project_id": "realmdbintro",
+    "storage_bucket": "realmdbintro.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:789139840738:android:126e37b48f9088808cc8bb",
+        "android_client_info": {
+          "package_name": "com.realmdbintro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "789139840738-6ptfp1tl2c9mit7fov2u9rnj4t02bsmd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.realmdbintro",
+            "certificate_hash": "24031e0e840ca6f54e5761973bce8513e3eb9ad3"
+          }
+        },
+        {
+          "client_id": "789139840738-s0cthah0n7mpmnte6uh2au3d696i6hlc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.realmdbintro",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "789139840738-ugn54bchh4mabgjo5a9583h4i2vdm7b4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAueVdV3iG1ltw5m_eKJTuzAP3ZLOSG4U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "789139840738-ugn54bchh4mabgjo5a9583h4i2vdm7b4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

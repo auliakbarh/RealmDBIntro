@@ -8,10 +8,15 @@
   },
   "scripts": {
     "android": "react-native run-android",
+    "android-release": "npx react-native run-android --variant=release",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "get-fingerprint-debug": "cd android/app && keytool -list -v -keystore debug.keystore -alias androiddebugkey -storepass android -keypass android",
+    "get-keyhash-debug": "cd android/app && keytool -exportcert -alias androiddebugkey -keystore debug.keystore | openssl sha1 -binary | openssl base64",
+    "get-fingerprint-release": "cd android/app && keytool -list -v -keystore my-upload-key.keystore -alias my-key-alias -storepass auliakbarh -keypass auliakbarh",
+    "get-keyhash-release": "cd android/app && keytool -exportcert -alias my-key-alias -keystore my-upload-key.keystore | openssl sha1 -binary | openssl base64"
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.11",
@@ -23,7 +28,8 @@
     "react-native-gesture-handler": "^1.10.3",
     "react-native-reanimated": "^2.2.0",
     "react-native-safe-area-context": "^3.2.0",
-    "react-native-screens": "^3.4.0"
+    "react-native-screens": "^3.4.0",
+    "realm": "^10.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

@@ -4,7 +4,7 @@ import {
   StackNavigationOptions,
 } from '@react-navigation/stack';
 import * as ScreenNames from './screenNames';
-import {HomeContainer, AboutContainer} from 'screens';
+import {HomeContainer, UserListContainer, CustomerListContainer} from 'screens';
 
 const Stack = createStackNavigator();
 
@@ -26,8 +26,12 @@ const StackNavigator: React.FC<Props> = ({initialRouteName}) => {
         component={HomeContainer}
       />
       <Stack.Screen
-        name={ScreenNames.STACK_NAME.about}
-        component={AboutContainer}
+        name={ScreenNames.STACK_NAME.userList}
+        component={UserListContainer}
+      />
+      <Stack.Screen
+        name={ScreenNames.STACK_NAME.customerList}
+        component={CustomerListContainer}
       />
     </Stack.Navigator>
   );

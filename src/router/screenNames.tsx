@@ -1,11 +1,13 @@
 const stack = 'Stack';
 export const STACK_NAME = {
   home: `${stack}-Home`,
-  about: `${stack}-About`,
+  userList: `${stack}-UserList`,
+  customerList: `${stack}-CustomerList`,
 };
 
 const tab = 'Tab';
 export const TAB_NAME = {
   home: `${tab}-Home`,
-  about: `${tab}-About`,
+  userList: `${tab}-UserList`,
+  customerList: `${tab}-CustomerList`,
 };
