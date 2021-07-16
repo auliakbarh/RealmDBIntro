@@ -1,7 +1,7 @@
-#Simple Implementation of Realm DB
+# Simple Implementation of Realm DB
 React Native project with Realm DB by auliakbarh
 
-##👨🏻‍💻 [Buy me a ☕](https://paypal.me/auliakbarh) please ☺️
+## 👨🏻‍💻 [Buy me a ☕](https://paypal.me/auliakbarh) please ☺️
 
 ## Infrastructure
 
