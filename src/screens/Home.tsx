@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, SafeAreaView, Text, FlatList} from 'react-native';
 import {Button} from '@/components';
-import DB from '@/services';
+import {Service as DB} from '@/services';
 import {UsersSchemeName, CustomersSchemeName} from '@/models';
 import MockData from '@/assets/json';
 import {UsersType, CustomersType} from '@/models';
@@ -61,7 +61,8 @@ const HomeContainer: React.FC<Props> = ({}) => {
     await getSizeDB();
   };
 
-  const showSchemeNames = () => {
+  const showSchemeNames = async () => {
+    await getSizeDB();
     switch (action) {
       case 'show':
         setAction('hide');

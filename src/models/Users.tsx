@@ -2,10 +2,10 @@ export const name = 'USERS';
 export type Users = {
   id: number;
   first_name: string;
-  last_name: string;
-  email: string;
-  gender: string;
-  address: string;
+  last_name?: string;
+  email?: string;
+  gender?: string;
+  address?: string;
 };
 
 const schema = {
@@ -14,10 +14,10 @@ const schema = {
   properties: {
     id: 'int',
     first_name: 'string',
-    last_name: 'string',
-    email: 'string',
-    gender: 'string',
-    address: 'string',
+    last_name: 'string?',
+    email: 'string?',
+    gender: 'string?',
+    address: 'string?',
   },
 };
 

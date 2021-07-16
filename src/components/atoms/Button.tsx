@@ -16,6 +16,7 @@ interface Props {
   rightIcon?: React.ReactNode;
   onPress?: () => any | void;
   disabled?: boolean;
+  useDisabledStyle?: boolean;
 }
 
 const ButtonComponent: React.FC<Props> = ({
@@ -26,10 +27,15 @@ const ButtonComponent: React.FC<Props> = ({
   label,
   onPress,
   disabled,
+  useDisabledStyle = true,
 }) => {
   return (
     <TouchableOpacity
-      style={[styles.container, style, disabled && styles.disabled]}
+      style={[
+        styles.container,
+        style,
+        useDisabledStyle && disabled && styles.disabled,
+      ]}
       onPress={onPress}
       disabled={disabled}>
       {leftIcon}

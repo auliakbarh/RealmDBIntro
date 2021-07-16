@@ -13,6 +13,7 @@ plugins.push([
       json: './src/assets/json',
       models: './src/models',
       components: './src/components',
+      services: './src/services',
     },
   },
 ]);

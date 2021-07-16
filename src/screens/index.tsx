@@ -1,2 +1,2 @@
 export {default as HomeContainer} from 'screens/Home';
-export {default as AboutContainer} from 'screens/About';
+export {default as UserListContainer} from '@/screens/UserList';
